@@ -24,11 +24,17 @@ const price = () => {
     const calculateAverage = async (prices) => {
         let average = Big('0');
 
-        prices.forEach(price => {
-            average = average.add(price)
+        let weightSum = Big('0');
+
+        prices.forEach(item => {
+            let price = item.price;
+            let weight = Big(item.weight);
+            weightSum = weightSum.add(weight);
+            
+            average = average.add(price.times(weight));
         });
 
-        return average.div(prices.length);
+        return average.div(weightSum);
     }
 
     const fetchPrice = async () => {
@@ -41,9 +47,21 @@ const price = () => {
         const mxcPrice = await fetchMxcPrice();
         const kuCoinPrice = await fetchKuCoin();
         const coinbenePrice = await fetchCoinbene();
-        prices.push(mxcPrice);
-        prices.push(kuCoinPrice);
-        prices.push(coinbenePrice);
+        prices.push({
+                        name: "mxc",
+                        weight: '34',
+                        price: mxcPrice
+                    });
+        prices.push({
+                        name: "kucoin",
+                        weight: '33',
+                        price: kuCoinPrice
+                    });
+        prices.push({
+                        name: "coinbene",
+                        weight: '33',
+                        price: coinbenePrice
+                    });
 
         const average = await calculateAverage(prices);
         let finalPrice = average;
