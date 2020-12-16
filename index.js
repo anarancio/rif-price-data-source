@@ -8,8 +8,8 @@ const cron = require('node-cron');
 const price = require('./src/services/price.js');
 
 app.use(cors())
-global.pricing = 0;
-global.ts = 0;
+global.pricing = process.env.MIN_SATOSHI;
+global.ts = Date.now();
 
 app.get('/', (req, res) => {
   res.json({price: global.pricing, date: global.ts})
