@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const port = 3000
+const port = process.env.PORT
+const CRON = process.env.CRON
 const cron = require('node-cron');
 const price = require('./src/services/price.js');
 
@@ -17,6 +19,6 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-cron.schedule('0,20,40 * * * * *', () => {
+cron.schedule(CRON, () => {
     price().fetchPrice();
 });
